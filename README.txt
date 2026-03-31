@@ -1,16 +1,21 @@
 Oracle of Olympus — project layout
 ====================================
 
-WEB (deploy all of this to Vercel, same as before)
-  index.html                 — small menu (Oracle + teacher pages + printables)
+WEB (deploy all of this to Vercel)
+  index.html                 — public landing only (Class 4 → Enter → Oracle)
+  assets/landing-bg.png      — background photo for index (keep with site)
   oracle_clues_final.html    — main laptop activity
   qr-code-pages/             — NFC passcode URLs (HTML + shared css/js)
 
-PRINT (not required for the website to run)
-  printables/                — PDFs: starting cards, scrolls, verdict, teacher sheet, data sheet
+TEACHER (bookmark direct URLs; not linked from the public landing)
+  .../qr-code-pages/index.html     — passcode / NFC page list
+  .../printables/01_....pdf etc.   — PDFs
+
+PRINT
+  printables/                — PDFs
 
 NOTES
   docs/DEPLOY-VERCEL.txt     — if the live site shows 404, read this
-  docs/PUSH-TO-GITHUB.txt   — finish uploading: git remote + push (needs your login)
+  docs/PUSH-TO-GITHUB.txt    — git remote + push
 
-NFC tag URLs do not change — still .../qr-code-pages/qr-XXXX.html
+NFC tag URLs — still .../qr-code-pages/qr-XXXX.html

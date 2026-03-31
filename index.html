@@ -3,34 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oracle of Olympus — site</title>
+<title>Oracle of Olympus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  body{font-family:system-ui,sans-serif;padding:clamp(1rem,4vw,2rem);max-width:26rem;margin:0 auto;line-height:1.5;color:#1d1d1f}
-  h1{font-size:1.25rem;margin-bottom:0.5rem}
-  h2{font-size:0.95rem;text-transform:uppercase;letter-spacing:0.06em;color:#636366;margin:1.5rem 0 0.6rem}
-  p{color:#3a3a3c;font-size:15px;margin-bottom:1.25rem}
-  ul{list-style:none;padding:0;margin:0}
-  li{margin-bottom:10px}
-  a{display:block;padding:14px 16px;background:#f5f5f7;border-radius:12px;color:#0a84ff;font-weight:600;text-decoration:none;border:1px solid #e5e5ea}
-  a:hover{background:#eaeaea}
-  .sub a{font-size:14px;font-weight:500;padding:10px 14px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(16px,4vw,32px);
+  font-family:"DM Sans",system-ui,sans-serif;
+  color:#1a1528;
+  background:#6b7a8f url("assets/landing-bg.png") center/cover no-repeat fixed;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:linear-gradient(180deg,rgba(15,20,35,0.25) 0%,rgba(25,35,55,0.35) 100%);
+  pointer-events:none;
+}
+.landing{
+  position:relative;
+  z-index:1;
+  width:min(100%,380px);
+  padding:clamp(28px,6vw,40px) clamp(24px,5vw,36px);
+  text-align:center;
+  border-radius:24px;
+  background:rgba(255,255,255,0.38);
+  border:1px solid rgba(255,255,255,0.65);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.85);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.class-label{
+  font-family:"Cinzel",Georgia,serif;
+  font-size:clamp(1.75rem,6vw,2.125rem);
+  font-weight:700;
+  letter-spacing:0.08em;
+  color:#0f1419;
+  text-shadow:0 1px 0 rgba(255,255,255,0.5);
+  margin-bottom:8px;
+}
+.enter-hint{
+  font-size:15px;
+  font-weight:500;
+  color:#2c3544;
+  margin-bottom:26px;
+  letter-spacing:0.02em;
+}
+.enter-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:52px;
+  padding:0 36px;
+  font-family:"DM Sans",system-ui,sans-serif;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  background:linear-gradient(180deg,#1e3a5f 0%,#152a45 100%);
+  border:1px solid rgba(255,255,255,0.25);
+  box-shadow:0 6px 24px rgba(15,30,50,0.35),inset 0 1px 0 rgba(255,255,255,0.15);
+  transition:transform 0.15s ease,box-shadow 0.15s ease,filter 0.15s ease;
+}
+.enter-btn:hover{
+  filter:brightness(1.06);
+  box-shadow:0 8px 28px rgba(15,30,50,0.4),inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.enter-btn:active{transform:scale(0.98)}
 </style>
 </head>
 <body>
-  <h1>Oracle of Olympus</h1>
-  <p>Teams use the first link on the laptop. You can bookmark it directly.</p>
-  <ul>
-    <li><a href="oracle_clues_final.html">Open the Oracle (main activity)</a></li>
-    <li><a href="qr-code-pages/index.html">Teacher: passcode pages for NFC URLs</a></li>
-  </ul>
-
-  <h2>Printables (PDFs)</h2>
-  <ul class="sub">
-    <li><a href="printables/01_starting_cards.pdf">01 — Starting cards</a></li>
-    <li><a href="printables/02_evidence_scrolls.pdf">02 — Evidence scrolls</a></li>
-    <li><a href="printables/03_verdict_sheets.pdf">03 — Verdict sheets</a></li>
-    <li><a href="printables/04_teacher_cheat_sheet.pdf">04 — Teacher cheat sheet</a></li>
-    <li><a href="printables/05_data_sheet.pdf">05 — Data sheet</a></li>
-  </ul>
+  <main class="landing" role="main">
+    <p class="class-label">Class 4</p>
+    <p class="enter-hint">Enter here</p>
+    <a class="enter-btn" href="oracle_clues_final.html">Enter</a>
+  </main>
 </body>
 </html>
