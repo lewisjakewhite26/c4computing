@@ -550,24 +550,24 @@ body{
   .pw-btn{width:100%}
 }
 
-/* Fullscreen toggle — above clue modal */
+/* Fullscreen — small square control, above clue modal */
 .fs-toggle{
   position:fixed;
   z-index:6000;
-  top:clamp(12px,2.5vw,22px);
-  right:clamp(12px,2.5vw,22px);
-  padding:10px 16px;
-  font-family:inherit;
-  font-size:13px;
-  font-weight:700;
-  letter-spacing:0.06em;
-  text-transform:uppercase;
+  top:clamp(10px,2vw,18px);
+  right:clamp(10px,2vw,18px);
+  width:34px;
+  height:34px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   color:var(--text2);
   background:rgba(255,255,255,0.88);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   border:1px solid var(--glass-border);
-  border-radius:999px;
+  border-radius:8px;
   box-shadow:var(--glass-shadow);
   cursor:pointer;
   transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s;
@@ -576,11 +576,12 @@ body{
   background:rgba(255,255,255,0.96);
   box-shadow:0 10px 28px rgba(31,38,135,0.14);
 }
-.fs-toggle:active{transform:scale(0.98)}
+.fs-toggle:active{transform:scale(0.97)}
 .fs-toggle:focus-visible{
   outline:2px solid var(--accent);
   outline-offset:3px;
 }
+.fs-toggle svg{display:block;flex-shrink:0}
 html:fullscreen, html:-webkit-full-screen{
   background:
     radial-gradient(ellipse 120% 80% at 50% -20%,rgba(255,255,255,0.9),transparent 50%),
@@ -589,7 +590,10 @@ html:fullscreen, html:-webkit-full-screen{
 </style>
 </head>
 <body>
-<button type="button" class="fs-toggle" id="fsToggle" aria-pressed="false" title="Fill the screen (Esc to exit)">Fullscreen</button>
+<button type="button" class="fs-toggle" id="fsToggle" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen (Esc to exit)">
+  <svg class="fs-enter" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5"/><path d="M15 4h5v5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></g></svg>
+  <svg class="fs-exit" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" hidden><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></g></svg>
+</button>
 <div class="app">
 
   <header class="hero">
@@ -938,8 +942,12 @@ html:fullscreen, html:-webkit-full-screen{
   function sync(){
     const on = !!fsEl();
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    btn.textContent = on ? 'Exit fullscreen' : 'Fullscreen';
-    btn.title = on ? 'Leave fullscreen (or press Esc)' : 'Fill the screen (Esc to exit)';
+    btn.setAttribute('aria-label', on ? 'Exit fullscreen' : 'Enter fullscreen');
+    btn.title = on ? 'Exit fullscreen (Esc)' : 'Enter fullscreen (Esc to exit)';
+    const enterIc = btn.querySelector('.fs-enter');
+    const exitIc = btn.querySelector('.fs-exit');
+    if(enterIc) enterIc.hidden = on;
+    if(exitIc) exitIc.hidden = !on;
   }
   function enter(){
     const req = root.requestFullscreen || root.webkitRequestFullscreen || root.msRequestFullscreen;

@@ -84,13 +84,70 @@ body::before{
   box-shadow:0 8px 28px rgba(15,30,50,0.4),inset 0 1px 0 rgba(255,255,255,0.2);
 }
 .enter-btn:active{transform:scale(0.98)}
+
+.fs-toggle{
+  position:fixed;
+  z-index:10;
+  top:clamp(10px,2vw,18px);
+  right:clamp(10px,2vw,18px);
+  width:34px;
+  height:34px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#2c3544;
+  background:rgba(255,255,255,0.45);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.7);
+  border-radius:8px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.1);
+  cursor:pointer;
+  transition:transform 0.15s ease,background 0.15s,box-shadow 0.15s;
+}
+.fs-toggle:hover{
+  background:rgba(255,255,255,0.62);
+  box-shadow:0 6px 20px rgba(0,0,0,0.12);
+}
+.fs-toggle:active{transform:scale(0.97)}
+.fs-toggle:focus-visible{outline:2px solid #1e3a5f;outline-offset:3px}
+.fs-toggle svg{display:block;flex-shrink:0}
+html:fullscreen,html:-webkit-full-screen{background:#6b7a8f}
 </style>
 </head>
 <body>
+  <button type="button" class="fs-toggle" id="fsToggle" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen (Esc to exit)">
+    <svg class="fs-enter" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5"/><path d="M15 4h5v5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></g></svg>
+    <svg class="fs-exit" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" hidden><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></g></svg>
+  </button>
   <main class="landing" role="main">
     <p class="class-label">Class 4</p>
     <p class="enter-hint">Enter here</p>
     <a class="enter-btn" href="oracle_clues_final.html">Enter</a>
   </main>
+  <script>
+  (function(){
+    var btn=document.getElementById('fsToggle');
+    if(!btn)return;
+    var root=document.documentElement;
+    function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement||null;}
+    function sync(){
+      var on=!!fsEl();
+      btn.setAttribute('aria-pressed',on?'true':'false');
+      btn.setAttribute('aria-label',on?'Exit fullscreen':'Enter fullscreen');
+      btn.title=on?'Exit fullscreen (Esc)':'Enter fullscreen (Esc to exit)';
+      var a=btn.querySelector('.fs-enter'),b=btn.querySelector('.fs-exit');
+      if(a)a.hidden=on;if(b)b.hidden=!on;
+    }
+    function enter(){var r=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen;if(r)r.call(root).catch(function(){});}
+    function exit(){var x=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;if(x)x.call(document);}
+    btn.addEventListener('click',function(){fsEl()?exit():enter();});
+    document.addEventListener('fullscreenchange',sync);
+    document.addEventListener('webkitfullscreenchange',sync);
+    document.addEventListener('MSFullscreenChange',sync);
+    sync();
+  })();
+  </script>
 </body>
 </html>
