@@ -11,5 +11,6 @@ PRINT (not required for the website to run)
 
 NOTES
   docs/DEPLOY-VERCEL.txt     — if the live site shows 404, read this
+  docs/PUSH-TO-GITHUB.txt   — finish uploading: git remote + push (needs your login)
 
 NFC tag URLs do not change — still .../qr-code-pages/qr-XXXX.html
