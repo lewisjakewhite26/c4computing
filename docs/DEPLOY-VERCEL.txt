@@ -1,0 +1,61 @@
+Fixing Vercel 404 at your-project.vercel.app
+============================================
+
+1) QUICK TEST IN THE BROWSER
+   Open these URLs (use your real domain):
+
+   https://c4comp.vercel.app/oracle_clues_final.html
+   https://c4comp.vercel.app/qr-code-pages/qr-7392.html
+
+   • If THESE work but "/" shows 404 → only the homepage is missing (see step 4).
+   • If THESE also 404 → the site files are not in the deployment (steps 2–3).
+
+
+2) CHECK GITHUB (repo: lewisjakewhite26/C4comp or whatever you linked)
+   On github.com, open the repo at the branch Vercel deploys (usually "main").
+
+   You should see at the TOP level (not buried in another folder):
+     index.html
+     oracle_clues_final.html
+     qr-code-pages/   (folder)
+     printables/       (PDFs — optional for the live site)
+     docs/             (notes — optional for the live site)
+
+   If you only see a README or a different project → push the Oracle files into this repo
+   from your oracle_of_olympus_printables folder, or connect Vercel to the repo that
+   actually contains the HTML.
+
+
+3) VERCEL PROJECT SETTINGS (most common fix)
+   Vercel → your project → Settings → General
+
+   • Root Directory
+     - Leave EMPTY if index.html is at the repo root.
+     - If you put the site inside a subfolder (e.g. "oracle_of_olympus_printables"),
+       set Root Directory to that folder name exactly.
+
+   Vercel → Settings → Build & Deployment
+
+   • Framework Preset → Other
+   • Build Command → EMPTY (delete anything like "npm run build")
+   • Output Directory → EMPTY (delete "dist", ".next", "out", "public" unless you really use them)
+   • Install Command → EMPTY (unless you add a real Node project later)
+
+   Save, then Deployments → Redeploy the latest commit (or push a small commit).
+
+
+4) HOMEPAGE ONLY BROKEN
+   If oracle_clues_final.html works but "/" does not:
+   • Confirm index.html is committed on GitHub at the root (or inside Root Directory).
+   • Or in Vercel → Settings → Redirects add:
+       Source: /
+       Destination: /oracle_clues_final.html
+       Permanent: no
+
+
+5) NFC / PASSCODE URLS AFTER IT WORKS
+   Base: https://c4comp.vercel.app
+   Examples:
+     .../oracle_clues_final.html
+     .../qr-code-pages/qr-7392.html
+     .../qr-code-pages/index.html
