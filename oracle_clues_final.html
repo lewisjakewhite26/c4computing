@@ -549,9 +549,47 @@ body{
   .pw-row{flex-direction:column}
   .pw-btn{width:100%}
 }
+
+/* Fullscreen toggle — above clue modal */
+.fs-toggle{
+  position:fixed;
+  z-index:6000;
+  top:clamp(12px,2.5vw,22px);
+  right:clamp(12px,2.5vw,22px);
+  padding:10px 16px;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--text2);
+  background:rgba(255,255,255,0.88);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);
+  border-radius:999px;
+  box-shadow:var(--glass-shadow);
+  cursor:pointer;
+  transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s;
+}
+.fs-toggle:hover{
+  background:rgba(255,255,255,0.96);
+  box-shadow:0 10px 28px rgba(31,38,135,0.14);
+}
+.fs-toggle:active{transform:scale(0.98)}
+.fs-toggle:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+}
+html:fullscreen, html:-webkit-full-screen{
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%,rgba(255,255,255,0.9),transparent 50%),
+    linear-gradient(165deg,var(--bg1) 0%,var(--bg2) 45%,var(--bg3) 100%);
+}
 </style>
 </head>
 <body>
+<button type="button" class="fs-toggle" id="fsToggle" aria-pressed="false" title="Fill the screen (Esc to exit)">Fullscreen</button>
 <div class="app">
 
   <header class="hero">
@@ -890,6 +928,34 @@ body{
 </div>
 
 <script>
+(function(){
+  const btn = document.getElementById('fsToggle');
+  if(!btn) return;
+  const root = document.documentElement;
+  function fsEl(){
+    return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement || null;
+  }
+  function sync(){
+    const on = !!fsEl();
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.textContent = on ? 'Exit fullscreen' : 'Fullscreen';
+    btn.title = on ? 'Leave fullscreen (or press Esc)' : 'Fill the screen (Esc to exit)';
+  }
+  function enter(){
+    const req = root.requestFullscreen || root.webkitRequestFullscreen || root.msRequestFullscreen;
+    if(req) req.call(root).catch(function(){});
+  }
+  function exit(){
+    const ex = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+    if(ex) ex.call(document);
+  }
+  btn.addEventListener('click', function(){ fsEl() ? exit() : enter(); });
+  document.addEventListener('fullscreenchange', sync);
+  document.addEventListener('webkitfullscreenchange', sync);
+  document.addEventListener('MSFullscreenChange', sync);
+  sync();
+})();
+
 /* Five 4-digit codes — see qr-code-pages (URLs can be written to NFC tags). Any code unlocks any clue card. */
 const PASSWORDS = new Set(['7392','5814','9260','3048','1675']);
 
