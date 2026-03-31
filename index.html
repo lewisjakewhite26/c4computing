@@ -114,9 +114,34 @@ body::before{
 .fs-toggle:focus-visible{outline:2px solid #1e3a5f;outline-offset:3px}
 .fs-toggle svg{display:block;flex-shrink:0}
 html:fullscreen,html:-webkit-full-screen{background:#6b7a8f}
+
+/* Hidden teaching story (coffee) — bottom corner */
+.teacher-story-link{
+  position:fixed;
+  z-index:10;
+  bottom:clamp(10px,2vw,18px);
+  left:clamp(10px,2vw,18px);
+  font-size:1.15rem;
+  line-height:1;
+  text-decoration:none;
+  opacity:0.22;
+  transition:opacity 0.28s ease,transform 0.22s ease,filter 0.22s;
+  filter:grayscale(0.15);
+}
+.teacher-story-link:hover,.teacher-story-link:focus-visible{
+  opacity:0.95;
+  transform:scale(1.12);
+  filter:grayscale(0);
+  outline:none;
+}
+.teacher-story-link:focus-visible{
+  box-shadow:0 0 0 2px rgba(255,255,255,0.75);
+  border-radius:6px;
+}
 </style>
 </head>
 <body>
+  <a href="teaching-story.html" class="teacher-story-link" aria-label="Teaching slide: the story behind the mystery" title="The story (for the teacher)">☕</a>
   <button type="button" class="fs-toggle" id="fsToggle" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen (Esc to exit)">
     <svg class="fs-enter" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5"/><path d="M15 4h5v5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></g></svg>
     <svg class="fs-exit" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" hidden><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></g></svg>
@@ -128,11 +153,12 @@ html:fullscreen,html:-webkit-full-screen{background:#6b7a8f}
   </main>
   <script>
   (function(){
-    var btn=document.getElementById('fsToggle');
-    if(!btn)return;
+    var FS_RESUME_KEY='oracleFsResume';
     var root=document.documentElement;
     function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement||null;}
-    function sync(){
+    function syncToggle(){
+      var btn=document.getElementById('fsToggle');
+      if(!btn)return;
       var on=!!fsEl();
       btn.setAttribute('aria-pressed',on?'true':'false');
       btn.setAttribute('aria-label',on?'Exit fullscreen':'Enter fullscreen');
@@ -140,13 +166,37 @@ html:fullscreen,html:-webkit-full-screen{background:#6b7a8f}
       var a=btn.querySelector('.fs-enter'),b=btn.querySelector('.fs-exit');
       if(a)a.hidden=on;if(b)b.hidden=!on;
     }
-    function enter(){var r=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen;if(r)r.call(root).catch(function(){});}
-    function exit(){var x=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;if(x)x.call(document);}
-    btn.addEventListener('click',function(){fsEl()?exit():enter();});
-    document.addEventListener('fullscreenchange',sync);
-    document.addEventListener('webkitfullscreenchange',sync);
-    document.addEventListener('MSFullscreenChange',sync);
-    sync();
+    function onFullscreenEvent(){
+      if(!fsEl()){try{sessionStorage.removeItem(FS_RESUME_KEY);}catch(e){}}
+      syncToggle();
+    }
+    function enter(){
+      var r=root.requestFullscreen||root.webkitRequestFullscreen||root.msRequestFullscreen;
+      if(!r)return Promise.reject();
+      return Promise.resolve(r.call(root));
+    }
+    function exit(){
+      var x=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
+      if(x)return Promise.resolve(x.call(document));
+      return Promise.resolve();
+    }
+    var enterLink=document.querySelector('.enter-btn');
+    if(enterLink){
+      enterLink.addEventListener('click',function(){
+        try{
+          if(fsEl()) sessionStorage.setItem(FS_RESUME_KEY,'1');
+          else sessionStorage.removeItem(FS_RESUME_KEY);
+        }catch(e){}
+      });
+    }
+    var btn=document.getElementById('fsToggle');
+    if(btn){
+      btn.addEventListener('click',function(){(fsEl()?exit():enter()).catch(function(){});});
+    }
+    document.addEventListener('fullscreenchange',onFullscreenEvent);
+    document.addEventListener('webkitfullscreenchange',onFullscreenEvent);
+    document.addEventListener('MSFullscreenChange',onFullscreenEvent);
+    syncToggle();
   })();
   </script>
 </body>

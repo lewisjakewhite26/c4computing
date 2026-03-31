@@ -587,6 +587,34 @@ html:fullscreen, html:-webkit-full-screen{
     radial-gradient(ellipse 120% 80% at 50% -20%,rgba(255,255,255,0.9),transparent 50%),
     linear-gradient(165deg,var(--bg1) 0%,var(--bg2) 45%,var(--bg3) 100%);
 }
+
+/* One-tap fallback if browser blocks fullscreen until user gesture */
+.fs-resume-layer{
+  position:fixed;
+  inset:0;
+  z-index:7000;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:clamp(16px,4vw,28px);
+  cursor:pointer;
+  background:rgba(15,23,42,0.18);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.fs-resume-layer .fs-resume-hint{
+  font-size:13px;
+  font-weight:600;
+  color:#f5f5f7;
+  padding:12px 18px;
+  border-radius:999px;
+  background:rgba(29,29,31,0.78);
+  border:1px solid rgba(255,255,255,0.14);
+  pointer-events:none;
+  text-align:center;
+  max-width:min(100%,320px);
+  line-height:1.4;
+}
 </style>
 </head>
 <body>
@@ -933,13 +961,17 @@ html:fullscreen, html:-webkit-full-screen{
 
 <script>
 (function(){
+  const FS_RESUME_KEY = 'oracleFsResume';
   const btn = document.getElementById('fsToggle');
-  if(!btn) return;
   const root = document.documentElement;
   function fsEl(){
     return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement || null;
   }
-  function sync(){
+  function clearResumeKey(){
+    try{ sessionStorage.removeItem(FS_RESUME_KEY); }catch(e){}
+  }
+  function syncToggle(){
+    if(!btn) return;
     const on = !!fsEl();
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     btn.setAttribute('aria-label', on ? 'Exit fullscreen' : 'Enter fullscreen');
@@ -949,19 +981,73 @@ html:fullscreen, html:-webkit-full-screen{
     if(enterIc) enterIc.hidden = on;
     if(exitIc) exitIc.hidden = !on;
   }
+  function onFullscreenChange(){
+    if(!fsEl()) clearResumeKey();
+    syncToggle();
+  }
   function enter(){
     const req = root.requestFullscreen || root.webkitRequestFullscreen || root.msRequestFullscreen;
-    if(req) req.call(root).catch(function(){});
+    if(!req) return Promise.reject();
+    return Promise.resolve(req.call(root));
   }
   function exit(){
     const ex = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
-    if(ex) ex.call(document);
+    if(ex) return Promise.resolve(ex.call(document));
+    return Promise.resolve();
   }
-  btn.addEventListener('click', function(){ fsEl() ? exit() : enter(); });
-  document.addEventListener('fullscreenchange', sync);
-  document.addEventListener('webkitfullscreenchange', sync);
-  document.addEventListener('MSFullscreenChange', sync);
-  sync();
+  function tryResumeFromLanding(){
+    if(sessionStorage.getItem(FS_RESUME_KEY) !== '1') return;
+    function onSuccess(){
+      clearResumeKey();
+    }
+    enter().then(onSuccess).catch(function showResumeOverlay(){
+      if(document.getElementById('fsResumeLayer')) return;
+      const layer = document.createElement('div');
+      layer.id = 'fsResumeLayer';
+      layer.className = 'fs-resume-layer';
+      layer.setAttribute('role', 'button');
+      layer.setAttribute('tabindex', '0');
+      layer.setAttribute('aria-label', 'Tap to continue in fullscreen');
+      const hint = document.createElement('p');
+      hint.className = 'fs-resume-hint';
+      hint.textContent = 'Tap anywhere (or press a key) to stay fullscreen';
+      layer.appendChild(hint);
+      function onKey(e){
+        if(e.key === 'Escape'){
+          if(layer.parentNode){
+            e.preventDefault();
+            e.stopPropagation();
+            layer.remove();
+            document.removeEventListener('keydown', onKey, true);
+            clearResumeKey();
+          }
+          return;
+        }
+        attempt();
+      }
+      function attempt(){
+        enter().then(function(){
+          onSuccess();
+          layer.remove();
+          document.removeEventListener('keydown', onKey, true);
+        }).catch(function(){});
+      }
+      layer.addEventListener('click', attempt);
+      document.addEventListener('keydown', onKey, true);
+      document.body.appendChild(layer);
+      setTimeout(function(){ try{ layer.focus(); }catch(e){} }, 0);
+    });
+  }
+  if(btn){
+    btn.addEventListener('click', function(){
+      (fsEl() ? exit() : enter()).catch(function(){});
+    });
+  }
+  document.addEventListener('fullscreenchange', onFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+  document.addEventListener('MSFullscreenChange', onFullscreenChange);
+  syncToggle();
+  tryResumeFromLanding();
 })();
 
 /* Five 4-digit codes — see qr-code-pages (URLs can be written to NFC tags). Any code unlocks any clue card. */

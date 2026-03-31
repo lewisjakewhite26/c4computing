@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The story — Oracle of Olympus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0a0e1a;
+  --night2:#121a2e;
+  --dusk:#1a2744;
+  --horizon:#2d3f64;
+  --gold:#c9a227;
+  --gold-dim:rgba(201,162,39,0.35);
+  --mist:rgba(180,195,220,0.12);
+  --text:#e8ecf4;
+  --text-soft:rgba(232,236,244,0.78);
+  --accent:#7eb8ff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+}
+
+body{
+  font-family:"DM Sans",system-ui,sans-serif;
+  font-size:clamp(17px,2.1vw,20px);
+  line-height:1.65;
+  color:var(--text);
+  background:var(--night);
+  overflow-x:hidden;
+}
+
+/* ── Parallax field (fixed behind content) ── */
+.parallax-field{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.parallax-layer{
+  position:absolute;
+  inset:-15% 0 -5% 0;
+  will-change:transform;
+}
+@media (prefers-reduced-motion:reduce){
+  .parallax-layer{will-change:auto;transform:none !important}
+}
+
+.layer-sky{
+  background:
+    radial-gradient(ellipse 100% 70% at 50% -10%,rgba(90,120,180,0.35),transparent 55%),
+    linear-gradient(180deg,#070a12 0%,#121a2e 40%,#1e2d4a 100%);
+}
+.layer-stars{
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%,rgba(255,255,255,0.7),transparent),
+    radial-gradient(1px 1px at 45% 8%,rgba(255,255,255,0.5),transparent),
+    radial-gradient(1.5px 1.5px at 78% 22%,rgba(255,255,255,0.55),transparent),
+    radial-gradient(1px 1px at 88% 40%,rgba(255,255,255,0.4),transparent),
+    radial-gradient(1.5px 1.5px at 22% 55%,rgba(255,255,255,0.45),transparent),
+    radial-gradient(1px 1px at 62% 48%,rgba(255,255,255,0.35),transparent);
+  background-size:100% 100%;
+  opacity:0.55;
+}
+.layer-mountains-back{
+  bottom:-5%;
+  top:38%;
+  background:
+    linear-gradient(165deg,transparent 0%,rgba(15,22,38,0.4) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 320' preserveAspectRatio='none'%3E%3Cpath fill='%231a2338' d='M0 320 L0 180 L200 120 L380 200 L520 90 L700 160 L880 60 L1000 140 L1200 100 L1200 320 Z'/%3E%3C/svg%3E") center bottom/cover no-repeat;
+  opacity:0.85;
+}
+.layer-mountains-mid{
+  bottom:-8%;
+  top:48%;
+  background:
+    linear-gradient(180deg,transparent 0%,rgba(8,12,22,0.5) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 280' preserveAspectRatio='none'%3E%3Cpath fill='%23141c2e' d='M0 280 L0 200 L150 140 L320 220 L480 100 L640 180 L800 80 L960 200 L1200 120 L1200 280 Z'/%3E%3C/svg%3E") center bottom/cover no-repeat;
+}
+.layer-mist{
+  bottom:0;
+  top:55%;
+  background:linear-gradient(180deg,transparent,rgba(100,130,170,0.08) 40%,rgba(20,28,45,0.85) 100%);
+  mix-blend-mode:screen;
+  opacity:0.9;
+}
+.layer-glow{
+  top:15%;
+  left:50%;
+  width:min(90vw,720px);
+  height:min(90vw,720px);
+  /* horizontal centre applied in JS with parallax translate */
+  background:radial-gradient(circle,rgba(201,162,39,0.08) 0%,transparent 65%);
+}
+
+/* ── Scroll content ── */
+.story-root{
+  position:relative;
+  z-index:1;
+}
+
+.back-landing{
+  position:fixed;
+  top:clamp(12px,2vw,20px);
+  left:clamp(12px,2vw,20px);
+  z-index:20;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:0.04em;
+  color:var(--text-soft);
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(8px);
+  transition:color 0.2s,background 0.2s,border-color 0.2s;
+}
+.back-landing:hover,.back-landing:focus-visible{
+  color:var(--gold);
+  background:rgba(255,255,255,0.1);
+  border-color:var(--gold-dim);
+  outline:none;
+}
+
+.hero{
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:clamp(32px,8vw,80px) clamp(20px,5vw,40px);
+}
+.hero-ornament{
+  width:48px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:0 auto 28px;
+  opacity:0.9;
+}
+.hero-label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.35em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:16px;
+}
+.hero h1{
+  font-family:"Cinzel",Georgia,serif;
+  font-size:clamp(2rem,6.5vw,3.25rem);
+  font-weight:700;
+  letter-spacing:0.06em;
+  line-height:1.15;
+  color:#fff;
+  text-shadow:0 4px 40px rgba(0,0,0,0.45);
+  max-width:14ch;
+}
+.hero-scroll-hint{
+  margin-top:clamp(48px,12vh,100px);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--text-soft);
+  animation:float 3s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{opacity:0.45;transform:translateY(0)}
+  50%{opacity:0.85;transform:translateY(6px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-scroll-hint{animation:none;opacity:0.6}
+}
+
+.section{
+  min-height:min(100vh,920px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(56px,10vh,120px) clamp(22px,5vw,48px);
+}
+.section-inner{
+  width:100%;
+  max-width:38rem;
+}
+.section-kicker{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:14px;
+}
+.section h2{
+  font-family:"Cinzel",Georgia,serif;
+  font-size:clamp(1.35rem,3.5vw,1.85rem);
+  font-weight:700;
+  letter-spacing:0.04em;
+  color:#fff;
+  margin-bottom:clamp(20px,4vw,32px);
+  padding-bottom:16px;
+  border-bottom:1px solid var(--gold-dim);
+}
+
+.prose p{
+  margin-bottom:1.25em;
+  color:var(--text-soft);
+}
+.prose p:last-child{margin-bottom:0}
+.prose strong{color:var(--text);font-weight:600}
+
+/* Reveal on scroll */
+.reveal{
+  opacity:0;
+  transform:translateY(36px);
+  transition:opacity 0.9s cubic-bezier(0.22,1,0.36,1),transform 0.9s cubic-bezier(0.22,1,0.36,1);
+}
+.reveal.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+.hero .reveal:nth-child(1){transition-delay:0.04s}
+.hero .reveal:nth-child(2){transition-delay:0.14s}
+.hero .reveal:nth-child(3){transition-delay:0.26s}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .hero .reveal{transition-delay:0s !important}
+}
+
+.divider{
+  height:1px;
+  max-width:120px;
+  margin:clamp(48px,8vh,80px) auto;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+}
+
+.finale{
+  min-height:85vh;
+  padding-bottom:clamp(80px,15vh,140px);
+}
+.finale .section-inner{
+  text-align:center;
+  max-width:36rem;
+}
+.finale h2{
+  border-bottom:none;
+  padding-bottom:0;
+}
+.finale .prose{
+  text-align:left;
+  margin-top:28px;
+}
+
+.footer-note{
+  text-align:center;
+  font-size:13px;
+  color:rgba(232,236,244,0.45);
+  padding:24px 20px 48px;
+  letter-spacing:0.06em;
+}
+</style>
+</head>
+<body>
+<div class="parallax-field" aria-hidden="true">
+  <div class="parallax-layer layer-sky" data-speed="0.06"></div>
+  <div class="parallax-layer layer-stars" data-speed="0.1"></div>
+  <div class="parallax-layer layer-glow" data-speed="0.12"></div>
+  <div class="parallax-layer layer-mountains-back" data-speed="0.22"></div>
+  <div class="parallax-layer layer-mountains-mid" data-speed="0.32"></div>
+  <div class="parallax-layer layer-mist" data-speed="0.38"></div>
+</div>
+
+<a class="back-landing" href="index.html">← Back</a>
+
+<main class="story-root">
+
+  <header class="hero">
+    <div class="hero-ornament reveal" data-reveal></div>
+    <p class="hero-label reveal" data-reveal>For your teaching slide</p>
+    <h1 class="reveal" data-reveal>The Oracle<br>of Olympus</h1>
+    <p class="hero-scroll-hint">Scroll</p>
+  </header>
+
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-kicker reveal" data-reveal>Part one</p>
+      <h2 class="reveal" data-reveal>Who was Alexios?</h2>
+      <div class="prose reveal" data-reveal>
+        <p>Alexios lived in Athens, long ago. He was a trader. He bought and sold goods, and he lent people money in <strong>drachma</strong> — the silver coins Greeks used every day.</p>
+        <p>He kept careful records. He knew who owed him, who was family, and who was in the city on any given night. That made him useful. It also made him <strong>dangerous to cross</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-kicker reveal" data-reveal>Part two</p>
+      <h2 class="reveal" data-reveal>What happened?</h2>
+      <div class="prose reveal" data-reveal>
+        <p>One night, Alexios died. The city did not get a neat, simple answer. There were <strong>witnesses</strong>, <strong>debts</strong>, and <strong>family ties</strong> — and not everyone’s story lined up the same way.</p>
+        <p>Your class steps into that mess as <strong>investigators</strong>. You are not rewriting history from scratch. You are using a <strong>citizens database</strong> (on paper) and the clues you collect to decide what the evidence actually supports.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-kicker reveal" data-reveal>Part three</p>
+      <h2 class="reveal" data-reveal>What you’re really checking</h2>
+      <div class="prose reveal" data-reveal>
+        <p>The database lists citizens with facts: were they in Athens that night? Do they owe Alexios money? How are they related to him — and is that a <strong>blood</strong> relation or something else, like a stepbrother or brother-in-law?</p>
+        <p>Some rows start empty. You <strong>fill those in</strong> when Mr White or your scrolls give you new witnesses. If the table is wrong or incomplete, your counts will be wrong. That’s deliberate. It’s how real data work.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-kicker reveal" data-reveal>Part four</p>
+      <h2 class="reveal" data-reveal>How the day runs</h2>
+      <div class="prose reveal" data-reveal>
+        <p>Teams work around <strong>our school</strong>. At each location there is a hidden tag in <strong>your team’s colour</strong>. When you find it, <strong>Mr White</strong> scans it on his phone. That gives you a <strong>four-digit code</strong> for the laptop.</p>
+        <p>On the laptop you open the clue that matches where you’ve been. The codes work like keys — but the thinking work is still yours: ciphers, number puzzles, and reading the database carefully.</p>
+        <p>Near the end, one task sends you to a <strong>book poster</strong> elsewhere in school. The first letters of the titles spell a word you type on the laptop. It’s a quick check that you actually went there — a bit like a signature on the route.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <section class="section finale">
+    <div class="section-inner">
+      <p class="section-kicker reveal" data-reveal>Finish</p>
+      <h2 class="reveal" data-reveal>Verdict and teamwork</h2>
+      <div class="prose reveal" data-reveal>
+        <p>When the laptop says the investigation is complete, you go back to class with a full data sheet. Then you answer the questions on your <strong>Verdict Sheet</strong> — not by guessing, but by pointing to what the combined evidence suggests.</p>
+        <p>You might disagree. That’s fine if you can <strong>say why</strong>. The point is to read carefully, talk as a team, and treat the database like evidence — not wallpaper.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="footer-note">Oracle of Olympus · Class activity</p>
+</main>
+
+<script>
+(function(){
+  var layers = document.querySelectorAll('.parallax-layer[data-speed]');
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  function parallax(){
+    if(reduce) return;
+    var y = window.scrollY || window.pageYOffset;
+    var vh = window.innerHeight || 1;
+    layers.forEach(function(el){
+      var s = parseFloat(el.getAttribute('data-speed'), 10) || 0.2;
+      var t = y * s * 0.35;
+      if(el.classList.contains('layer-glow'))
+        el.style.transform = 'translate3d(-50%,' + t + 'px,0)';
+      else
+        el.style.transform = 'translate3d(0,' + t + 'px,0)';
+    });
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if(reduce) return;
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(function(){
+        parallax();
+        ticking = false;
+      });
+    }
+  }, {passive:true});
+  parallax();
+
+  var reveals = document.querySelectorAll('[data-reveal]');
+  if(!('IntersectionObserver' in window)){
+    reveals.forEach(function(el){ el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add('is-visible');
+        io.unobserve(en.target);
+      }
+    });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
+  reveals.forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
