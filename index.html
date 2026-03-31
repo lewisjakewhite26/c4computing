@@ -115,33 +115,47 @@ body::before{
 .fs-toggle svg{display:block;flex-shrink:0}
 html:fullscreen,html:-webkit-full-screen{background:#6b7a8f}
 
-/* Hidden teaching story (coffee) — bottom corner */
+/* Teaching story — same footprint as fullscreen; readable on photo bg */
 .teacher-story-link{
   position:fixed;
   z-index:10;
   bottom:clamp(10px,2vw,18px);
   left:clamp(10px,2vw,18px);
-  font-size:1.15rem;
-  line-height:1;
+  width:34px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-decoration:none;
-  opacity:0.22;
-  transition:opacity 0.28s ease,transform 0.22s ease,filter 0.22s;
-  filter:grayscale(0.15);
+  color:#1a2433;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.75);
+  border-radius:8px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.15);
+  transition:transform 0.2s ease,background 0.2s,box-shadow 0.2s;
 }
 .teacher-story-link:hover,.teacher-story-link:focus-visible{
-  opacity:0.95;
-  transform:scale(1.12);
-  filter:grayscale(0);
+  background:rgba(255,255,255,0.82);
+  box-shadow:0 6px 22px rgba(0,0,0,0.18);
+  transform:scale(1.05);
   outline:none;
 }
 .teacher-story-link:focus-visible{
-  box-shadow:0 0 0 2px rgba(255,255,255,0.75);
-  border-radius:6px;
+  box-shadow:0 0 0 2px #1e3a5f,0 6px 22px rgba(0,0,0,0.18);
 }
+.teacher-story-link svg{display:block}
 </style>
 </head>
 <body>
-  <a href="teaching-story.html" class="teacher-story-link" aria-label="Teaching slide: the story behind the mystery" title="The story (for the teacher)">☕</a>
+  <a href="teaching-story.html" class="teacher-story-link" aria-label="Teaching slide: the story behind the mystery" title="The story (for the teacher)">
+    <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9h8v7a2.5 2.5 0 0 1-2.5 2.5H8.5A2.5 2.5 0 0 1 6 16V9z"/>
+      <path d="M14 11.5h1.5a2 2 0 0 1 0 4H14"/>
+      <path d="M8 5.5c0 .8-.6 1.4-.6 2.2M11 5c0 1-.7 1.7-.7 2.8"/>
+    </svg>
+  </a>
   <button type="button" class="fs-toggle" id="fsToggle" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen (Esc to exit)">
     <svg class="fs-enter" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5"/><path d="M15 4h5v5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></g></svg>
     <svg class="fs-exit" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" hidden><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></g></svg>
