@@ -12,27 +12,27 @@ const PAYLOAD = {
     'Digits must match PASSWORDS in oracle_clues_final.html. See TEACHER-WHICH-CODE-WHERE.txt for the hybrid NFC + QR/print layout.',
   items: [
     {
-      href: 'qr-7392.html',
+      href: '/qr-code-pages/qr-7392.html',
       label: 'qr-7392.html',
       desc: 'Suggested code for first unlock (Clue I) — e.g. starting pack / first tag',
     },
     {
-      href: 'qr-5814.html',
+      href: '/qr-code-pages/qr-5814.html',
       label: 'qr-5814.html',
       desc: 'After shed → Gazebo / Clue II',
     },
     {
-      href: 'qr-9260.html',
+      href: '/qr-code-pages/qr-9260.html',
       label: 'qr-9260.html',
       desc: 'Table tennis / Clue III',
     },
     {
-      href: 'qr-3048.html',
+      href: '/qr-code-pages/qr-3048.html',
       label: 'qr-3048.html',
       desc: 'Football goal / Clue IV',
     },
     {
-      href: 'qr-1675.html',
+      href: '/qr-code-pages/qr-1675.html',
       label: 'qr-1675.html',
       desc: 'Storytelling chair / Clue V',
     },

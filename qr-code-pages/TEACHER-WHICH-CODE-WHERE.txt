@@ -1,25 +1,101 @@
-Oracle of Olympus — passcode pages (must match oracle_clues_final.html PASSWORDS)
+Oracle of Olympus — what you do (teacher / Mr White)
+====================================================
+Passcode pages must match oracle_clues_final.html (PASSWORDS). Printables live in printables/.
 
-SETUP
-  • Upload the whole website root to your host (index.html, oracle_clues_final.html, assets/, qr-code-pages/, printables/). PDFs live in printables/. Keep assets/ next to qr-code-pages/ — passcode pages use ../assets/landing-bg.png (same image as the public landing).
-  • Passcode pages are inside qr-code-pages/ — each qr-XXXX.html shows one 4-digit code (large type) plus a mini QR for testing. Point any printed QR or NFC URL at the full HTTPS path, e.g. …/qr-code-pages/qr-7392.html — the page opens like the landing (glass card) with that stop’s code.
-  • qr-code-pages/index.html lists all passcode links — for Mr White only. On the live site, enter 3141; the list is loaded from the server (not in the page HTML). Same tab remembers the list until closed. URL /qr-code-pages (no index.html) is rewritten to the same gated page on Vercel.
-  • Teams type the four digits on the laptop. The same pages can be opened by:
-      – tapping an NFC tag programmed with the page URL
-      – scanning the mini QR (or a larger QR you print pointing to the same URL)
-      – reading the digits off the screen if you project it or print a screenshot
 
-HYBRID LAYOUT (few NFC cards)
-  • Outside storage: ONE NFC tag programmed with the URL you want for that step (often qr-7392.html for Clue I — adjust to match your story).
-  • Other stops (Gazebo, Table tennis, Football goal, Storytelling chair): no NFC required. Print a QR on a sign, or print the four digits on a slip, or both.
-  • Mr White does not need to scan a tag at every stop — the site copy matches that. He still runs the Gazebo and Football challenges and reads data aloud.
+PART A — BEFORE THE DAY
+-----------------------
+  • Deploy the site (Vercel): index.html, oracle_clues_final.html, assets/, qr-code-pages/, api/, vercel.json at project root. PDFs optional on the host.
+  • Keep assets/ next to qr-code-pages/ — passcode pages use ../assets/landing-bg.png.
+  • Print (from printables/) at least:
+      – 05_data_sheet.pdf (one per team)
+      – Citizens database (whatever you use from the pack — often bundled with starting materials)
+      – 02_evidence_scrolls.pdf — TWO scrolls per team (both pieces of evidence; teams need them from the very start)
+      – 01_starting_cards.pdf if you use them
+      – 04_teacher_cheat_sheet.pdf for you
+  • Bookmark oracle_clues_final.html on the laptop (fullscreen if you like).
+  • Know your live base URL, e.g. https://YOURSITE.vercel.app — every NFC/QR below uses full paths like …/qr-code-pages/qr-7392.html
 
-SUGGESTED CODE / PAGE MAPPING (story order — laptop still accepts any of the five codes on any card)
-  7392  qr-7392.html  — Clue I · Equipment shed / storage (NFC or pack)
-  5814  qr-5814.html  — Clue II · Gazebo
-  9260  qr-9260.html  — Clue III · Table tennis
-  3048  qr-3048.html  — Clue IV · Football goal
-  1675  qr-1675.html  — Clue V · Storytelling chair
 
-CHANGING NUMBERS
-  Edit PASSWORDS in oracle_clues_final.html, data-oracle-code + digits in each qr-XXXX.html, and reprogram or reprint anything pointing at those URLs.
+PART B — START OF THE ACTIVITY (WHAT YOU GIVE EACH TEAM)
+--------------------------------------------------------
+  Hand out the STARTER PACK before they leave for the first outdoor stop. Include:
+
+  • Both evidence scrolls (from 02_evidence_scrolls — they are not given later at the gazebo or football goal).
+  • Data sheet + printed citizens database (and starting cards if you use them).
+  • The FIRST 4-digit code for Clue I — unless you rely entirely on NFC at the shed:
+        Code: 7392   Page: qr-7392.html
+      Put it on a slip in the pack, or expect them to get it only by tapping NFC at storage.
+
+  They use the laptop after each stop: open the clue that matches where they have been, expand the card, type the four digits under that clue.
+
+  Remind them: some stops send them back to YOU for a challenge — you add facts to their DATA SHEET there. You do NOT give them the next 4-digit code at those moments; the next code is always on a QR or slip at the NEXT location.
+
+
+PART C — PHYSICAL SETUP (NFC, QR, PRINTED DIGITS)
+--------------------------------------------------
+  Each 4-digit code is tied to one web page. Programme NFC and print QR codes to the FULL URL, e.g.:
+      https://YOURSITE.vercel.app/qr-code-pages/qr-7392.html
+
+  HYBRID (recommended — few NFC tags):
+  • OUTSIDE STORAGE / SHED: ONE NFC tag → qr-7392.html (shows 7392). Optional duplicate: same code on a slip in the starter pack.
+  • GAZEBO: QR on a sign and/or a printed slip with digits 5814 (page qr-5814.html). No NFC required.
+  • TABLE TENNIS: QR and/or slip 9260 (qr-9260.html).
+  • FOOTBALL GOAL: QR and/or slip 3048 (qr-3048.html).
+  • STORYTELLING CHAIR: QR and/or slip 1675 (qr-1675.html).
+
+  Teams can also open a passcode page by scanning the mini QR on the page itself (for testing) or by reading the large digits on screen if you project it — normally they use their materials at each place.
+
+  Passcode pages folder also contains index.html — YOUR private list of all links. On the live site only: open it, enter 3141; the list loads from the server. Same browser tab remembers until closed. Path /qr-code-pages (no index.html) is rewritten to the same page on Vercel.
+
+
+PART D — STORY ORDER (WHAT HAPPENS WHERE)
+-----------------------------------------
+  Use this as your run sheet. “Laptop” = oracle_clues_final.html.
+
+  Step 1 — EQUIPMENT SHED / STORAGE (Clue I)
+    • They obtain code 7392 (NFC tap and/or starter pack).
+    • On laptop: unlock Clue I, do the cipher, add Sostrate to the data sheet from the clue text (scroll + shed — note Sostrate vs Sostrates).
+    • You: nothing required at the shed unless you supervise.
+
+  Step 2 — GAZEBO (Clue II)
+    • They find 5814 at the gazebo (QR or slip) — NOT from you.
+    • On laptop: unlock Clue II, read about noughts and crosses.
+    • You: at the gazebo, play noughts and crosses; whole team must beat you. When they win, READ ALOUD the Bardas of Corinth row for their data sheet (cheat sheet / site text). Do NOT give them the next code; send them to table tennis for 9260.
+
+  Step 3 — TABLE TENNIS (Clue III)
+    • They find 9260 (QR or slip).
+    • On laptop: unlock Clue III, answer the blood-relatives count using the database + BOTH scrolls.
+    • You: not required unless you want to help stuck teams.
+
+  Step 4 — FOOTBALL GOAL (Clue IV)
+    • They find 3048 (QR or slip).
+    • On laptop: unlock Clue IV, read the Humpty Dumpty challenge.
+    • You: they recite Humpty Dumpty backwards (each member at least one line). Then you give the DEBT AMOUNT for Agathon the silversmith for their sheet. Do NOT give 1675; that is on a QR/slip at the storytelling chair.
+
+  Step 5 — STORYTELLING CHAIR (Clue V + finale)
+    • They find 1675 (QR or slip).
+    • On laptop: unlock Clue V, debt puzzle, final book puzzle, verdict.
+    • You: optional support; no standard “Mr White script” unless you add one.
+
+  QUICK CODE TABLE (same as passcode filenames):
+    7392  qr-7392.html   Clue I   Shed / pack / NFC
+    5814  qr-5814.html   Clue II  Gazebo (QR or paper)
+    9260  qr-9260.html   Clue III Table tennis (QR or paper)
+    3048  qr-3048.html   Clue IV  Football goal (QR or paper)
+    1675  qr-1675.html   Clue V   Storytelling chair (QR or paper)
+
+
+PART E — LAPTOP BEHAVIOUR (SO YOU ARE NOT SURPRISED)
+----------------------------------------------------
+  • Technically the site can accept any of the five codes on any clue card if a team types them out of order — the story text still pushes the intended order.
+  • After every stop they should return to the laptop, open the matching clue number, and enter the code they just found.
+
+
+PART F — CHANGING THE NUMBERS
+-----------------------------
+  Edit PASSWORDS in oracle_clues_final.html, the data-oracle-code / visible digits in each qr-XXXX.html, reprogram NFC, and reprint any QR codes or slips.
+
+
+END
+---

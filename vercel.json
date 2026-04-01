@@ -3,6 +3,10 @@
     {
       "source": "/qr-code-pages",
       "destination": "/qr-code-pages/index.html"
+    },
+    {
+      "source": "/qr-:code.html",
+      "destination": "/qr-code-pages/qr-:code.html"
     }
   ],
   "headers": [
