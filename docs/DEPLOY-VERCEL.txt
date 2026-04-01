@@ -53,7 +53,7 @@ Fixing Vercel 404 at your-project.vercel.app
        Permanent: no
 
 
-5) NFC / PASSCODE URLS AFTER IT WORKS
+5) PASSCODE PAGE URLS AFTER IT WORKS (NFC, QR, or print)
    Base: https://c4comp.vercel.app
    Examples:
      .../oracle_clues_final.html
