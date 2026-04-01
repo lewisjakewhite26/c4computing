@@ -4,33 +4,230 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>Oracle of Olympus — passcode pages (NFC, QR, print)</title>
+<title>Oracle — Mr White</title>
 <style>
   *{box-sizing:border-box}
-  body{font-family:system-ui,-apple-system,sans-serif;padding:24px;max-width:40rem;margin:0 auto;line-height:1.5;color:#1d1d1f;background:#f5f5f7}
-  h1{font-size:1.35rem;margin-bottom:8px}
-  p.lead{color:#3a3a3c;font-size:15px;margin-bottom:24px}
-  ul{list-style:none;padding:0;margin:0}
-  li{margin-bottom:12px;padding:14px 16px;background:#fff;border-radius:12px;border:1px solid #e5e5ea}
-  li a{font-weight:700;color:#0a84ff;text-decoration:none;font-size:17px}
-  li a:hover{text-decoration:underline}
-  li span{display:block;font-size:13px;color:#636366;margin-top:6px}
-  .note{margin-top:28px;padding:14px;background:#fff;border-radius:12px;font-size:14px;color:#3a3a3c;border-left:4px solid #0a84ff}
-  code{font-size:12px;background:#eee;padding:2px 6px;border-radius:4px}
+  body{
+    font-family:system-ui,-apple-system,sans-serif;
+    margin:0;
+    min-height:100dvh;
+    line-height:1.5;
+    color:#1d1d1f;
+    background:#1a1f2e;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px 20px;
+  }
+  #gate{
+    width:min(100%,22rem);
+    padding:28px 24px;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.25);
+    text-align:center;
+  }
+  #gate h1{font-size:1.2rem;margin:0 0 8px;font-weight:800}
+  #gate .sub{font-size:13px;color:#636366;margin-bottom:20px}
+  #mw-pass{
+    width:100%;
+    padding:14px 16px;
+    font-size:18px;
+    letter-spacing:0.2em;
+    text-align:center;
+    border:2px solid #c7c7cc;
+    border-radius:12px;
+    margin-bottom:12px;
+  }
+  #mw-pass:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,0.25)}
+  #mw-submit{
+    width:100%;
+    padding:14px;
+    font-size:16px;
+    font-weight:700;
+    color:#fff;
+    background:linear-gradient(180deg,#1e3a5f,#152a45);
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+  }
+  #mw-submit:hover{filter:brightness(1.05)}
+  #mw-submit:active{transform:scale(0.99)}
+  #mw-err{
+    margin:16px 0 0;
+    font-size:15px;
+    font-weight:700;
+    color:#c41e3a;
+    min-height:1.4em;
+    line-height:1.35;
+  }
+  #mw-err.shake{
+    animation:mw-shake 0.55s ease;
+  }
+  @keyframes mw-shake{
+    0%,100%{transform:translateX(0)}
+    15%{transform:translateX(-12px)}
+    30%{transform:translateX(12px)}
+    45%{transform:translateX(-10px)}
+    60%{transform:translateX(10px)}
+    75%{transform:translateX(-6px)}
+    90%{transform:translateX(6px)}
+  }
+  #content{
+    max-width:40rem;
+    width:100%;
+    background:#f5f5f7;
+    color:#1d1d1f;
+    padding:24px;
+    border-radius:16px;
+  }
+  #content h1{font-size:1.35rem;margin-bottom:8px}
+  #content p.lead{color:#3a3a3c;font-size:15px;margin-bottom:24px}
+  #content ul{list-style:none;padding:0;margin:0}
+  #content li{margin-bottom:12px;padding:14px 16px;background:#fff;border-radius:12px;border:1px solid #e5e5ea}
+  #content li a{font-weight:700;color:#0a84ff;text-decoration:none;font-size:17px}
+  #content li a:hover{text-decoration:underline}
+  #content li span{display:block;font-size:13px;color:#636366;margin-top:6px}
+  #content .note{margin-top:28px;padding:14px;background:#fff;border-radius:12px;font-size:14px;color:#3a3a3c;border-left:4px solid #0a84ff}
+  #content code{font-size:12px;background:#eee;padding:2px 6px;border-radius:4px}
+  #mw-load{margin:12px 0 0;font-size:14px;color:#636366}
 </style>
 </head>
 <body>
+
+<div id="gate">
+  <h1>For Mr White only</h1>
+  <p class="sub">Enter the four-digit access code to open the list of passcode page links.</p>
+  <input id="mw-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off" aria-label="Access code">
+  <button type="button" id="mw-submit">Unlock</button>
+  <p id="mw-err" role="alert" aria-live="polite"></p>
+  <p id="mw-load" hidden>Checking…</p>
+</div>
+
+<div id="content" hidden>
   <h1>Passcode pages</h1>
-  <p class="lead">Upload this whole <code>qr-code-pages</code> folder together with <code>assets/</code> (passcode pages use the same background image as the landing page). Each page shows one <strong>4-digit code</strong>. Open it with an <strong>NFC tap</strong> (URL written to a tag), a <strong>QR scan</strong> (point a phone camera at a printed code), or by <strong>reading the digits aloud</strong> from a printout. Teams type the code on the laptop. You only need <strong>one NFC tag</strong> in outside storage if other stops use printed QRs or slips — see <code>TEACHER-WHICH-CODE-WHERE.txt</code>.</p>
+  <p class="lead" id="mw-lead"></p>
+  <ul id="mw-ul"></ul>
+  <p class="note" id="mw-note"></p>
+</div>
 
-  <ul>
-    <li><a href="qr-7392.html">qr-7392.html</a><span>Suggested code for first unlock (Clue I) — e.g. starting pack / first tag</span></li>
-    <li><a href="qr-5814.html">qr-5814.html</a><span>After shed → Gazebo / Clue II</span></li>
-    <li><a href="qr-9260.html">qr-9260.html</a><span>Table tennis / Clue III</span></li>
-    <li><a href="qr-3048.html">qr-3048.html</a><span>Football goal / Clue IV</span></li>
-    <li><a href="qr-1675.html">qr-1675.html</a><span>Storytelling chair / Clue V</span></li>
-  </ul>
+<script>
+(function(){
+  var CACHE_KEY = 'oracle_mrwhite_list_v1';
+  var API = '/api/mrwhite-list';
+  var gate = document.getElementById('gate');
+  var content = document.getElementById('content');
+  var inp = document.getElementById('mw-pass');
+  var btn = document.getElementById('mw-submit');
+  var err = document.getElementById('mw-err');
+  var loadEl = document.getElementById('mw-load');
+  var leadEl = document.getElementById('mw-lead');
+  var ulEl = document.getElementById('mw-ul');
+  var noteEl = document.getElementById('mw-note');
 
-  <p class="note">Digits must match <code>PASSWORDS</code> in <code>oracle_clues_final.html</code>. See <code>TEACHER-WHICH-CODE-WHERE.txt</code> for the hybrid NFC + QR/print layout.</p>
+  function render(data){
+    leadEl.textContent = data.lead || '';
+    noteEl.textContent = data.note || '';
+    ulEl.innerHTML = '';
+    (data.items || []).forEach(function(it){
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = it.href;
+      a.textContent = it.label || it.href;
+      li.appendChild(a);
+      if (it.desc) {
+        var sp = document.createElement('span');
+        sp.textContent = it.desc;
+        li.appendChild(sp);
+      }
+      ulEl.appendChild(li);
+    });
+  }
+
+  function showList(data){
+    render(data);
+    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) {}
+    gate.hidden = true;
+    content.hidden = false;
+    loadEl.hidden = true;
+  }
+
+  function playWrongSound(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      var ctx = new Ctx();
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.22);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    }catch(e){}
+  }
+
+  function wrong(){
+    btn.disabled = false;
+    err.textContent = 'stop trying to cheat, it ruins it for everyone';
+    err.classList.remove('shake');
+    void err.offsetWidth;
+    err.classList.add('shake');
+    playWrongSound();
+    inp.value = '';
+    inp.focus();
+    loadEl.hidden = true;
+  }
+
+  function tryUnlock(){
+    err.textContent = '';
+    err.classList.remove('shake');
+    var v = (inp.value || '').replace(/\s/g, '');
+    if (!v) return;
+    btn.disabled = true;
+    loadEl.hidden = false;
+    fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin: v })
+    })
+      .then(function(r){
+        if (r.status === 401) return null;
+        if (!r.ok) throw new Error('bad');
+        return r.json();
+      })
+      .then(function(data){
+        btn.disabled = false;
+        if (data && data.ok && data.items) showList(data);
+        else wrong();
+      })
+      .catch(function(){
+        btn.disabled = false;
+        loadEl.hidden = true;
+        err.textContent = 'Could not reach the server. Open this page from the live Vercel site (not a saved file), then try again.';
+        err.classList.remove('shake');
+      });
+  }
+
+  try {
+    var raw = sessionStorage.getItem(CACHE_KEY);
+    if (raw) {
+      var cached = JSON.parse(raw);
+      if (cached && cached.ok && cached.items && cached.items.length) showList(cached);
+    }
+  } catch (e) {}
+
+  btn.addEventListener('click', tryUnlock);
+  inp.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') tryUnlock();
+  });
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,28 @@
+{
+  "rewrites": [
+    {
+      "source": "/qr-code-pages",
+      "destination": "/qr-code-pages/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/qr-code-pages",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/qr-code-pages/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ]
+}

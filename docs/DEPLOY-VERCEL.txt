@@ -18,6 +18,8 @@ Fixing Vercel 404 at your-project.vercel.app
      index.html
      oracle_clues_final.html
      qr-code-pages/   (folder)
+     api/              (mrwhite-list.js — teacher passcode list; required for Mr White’s gated index)
+     vercel.json       (rewrites /qr-code-pages → gated index; optional elsewhere)
      printables/       (PDFs — optional for the live site)
      docs/             (notes — optional for the live site)
 

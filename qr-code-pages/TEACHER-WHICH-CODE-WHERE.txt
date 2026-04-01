@@ -3,6 +3,7 @@ Oracle of Olympus — passcode pages (must match oracle_clues_final.html PASSWOR
 SETUP
   • Upload the whole website root to your host (index.html, oracle_clues_final.html, assets/, qr-code-pages/, printables/). PDFs live in printables/. Keep assets/ next to qr-code-pages/ — passcode pages use ../assets/landing-bg.png (same image as the public landing).
   • Passcode pages are inside qr-code-pages/ — each qr-XXXX.html shows one 4-digit code (large type) plus a mini QR for testing. Point any printed QR or NFC URL at the full HTTPS path, e.g. …/qr-code-pages/qr-7392.html — the page opens like the landing (glass card) with that stop’s code.
+  • qr-code-pages/index.html lists all passcode links — for Mr White only. On the live site, enter 3141; the list is loaded from the server (not in the page HTML). Same tab remembers the list until closed. URL /qr-code-pages (no index.html) is rewritten to the same gated page on Vercel.
   • Teams type the four digits on the laptop. The same pages can be opened by:
       – tapping an NFC tag programmed with the page URL
       – scanning the mini QR (or a larger QR you print pointing to the same URL)
