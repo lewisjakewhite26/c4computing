@@ -5,7 +5,7 @@ WEB (deploy all of this to Vercel)
   index.html                 — public landing only (Class 4 → Enter → Oracle)
   assets/landing-bg.png      — background photo for index (keep with site)
   oracle_clues_final.html    — main laptop activity
-  qr-code-pages/             — passcode pages (NFC URL, QR scan, or read digits)
+  qr-code-pages/             — passcode pages (NFC URL, QR scan, or read digits; needs assets/ for background)
 
 TEACHER (bookmark direct URLs; not linked from the public landing)
   .../qr-code-pages/index.html     — passcode / NFC page list

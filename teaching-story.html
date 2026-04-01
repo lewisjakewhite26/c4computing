@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +45,7 @@ body{
 }
 .parallax-layer{
   position:absolute;
-  inset:-15% 0 -5% 0;
+  inset:-32% 0 -22% 0;
   will-change:transform;
 }
 @media (prefers-reduced-motion:reduce){
@@ -67,6 +67,15 @@ body{
     radial-gradient(1px 1px at 62% 48%,rgba(255,255,255,0.35),transparent);
   background-size:100% 100%;
   opacity:0.55;
+}
+/* Drifts opposite scroll for extra depth */
+.layer-stars-slow{
+  background-image:
+    radial-gradient(1px 1px at 30% 30%,rgba(255,255,255,0.35),transparent),
+    radial-gradient(1.5px 1.5px at 70% 15%,rgba(255,255,255,0.4),transparent),
+    radial-gradient(1px 1px at 55% 60%,rgba(255,255,255,0.3),transparent);
+  background-size:120% 120%;
+  opacity:0.4;
 }
 .layer-mountains-back{
   bottom:-5%;
@@ -205,7 +214,6 @@ body{
   font-size:clamp(1.35rem,3.5vw,1.85rem);
   font-weight:700;
   letter-spacing:0.04em;
-  color:#fff;
   margin-bottom:clamp(20px,4vw,32px);
   padding-bottom:16px;
   border-bottom:1px solid var(--gold-dim);
@@ -213,27 +221,74 @@ body{
 
 .prose p{
   margin-bottom:1.25em;
-  color:var(--text-soft);
 }
 .prose p:last-child{margin-bottom:0}
-.prose strong{color:var(--text);font-weight:600}
+.prose strong{font-weight:600}
 
-/* Reveal on scroll */
-.reveal{
-  opacity:0;
-  transform:translateY(36px);
-  transition:opacity 0.9s cubic-bezier(0.22,1,0.36,1),transform 0.9s cubic-bezier(0.22,1,0.36,1);
+/* Scroll-scrubbed text: grey until the line rises into the reading band */
+[data-scroll-line]{
+  --scrub:0.2;
+  opacity:calc(0.22 + 0.78 * var(--scrub));
+  color:rgb(
+    calc(48 + 184 * var(--scrub)),
+    calc(54 + 182 * var(--scrub)),
+    calc(72 + 172 * var(--scrub))
+  );
+  transform:translate3d(0,calc((1 - var(--scrub)) * 16px),0) scale(calc(0.982 + 0.018 * var(--scrub)));
+  filter:blur(calc((1 - var(--scrub)) * 0.35px));
+  will-change:opacity,transform,filter;
 }
-.reveal.is-visible{
-  opacity:1;
-  transform:translateY(0);
+.hero [data-scroll-line]{
+  filter:blur(calc((1 - var(--scrub)) * 0.45px));
+  text-shadow:0 4px calc(24px + (1 - var(--scrub)) * 32px) rgba(0,0,0,calc(0.28 + (1 - var(--scrub)) * 0.4));
 }
-.hero .reveal:nth-child(1){transition-delay:0.04s}
-.hero .reveal:nth-child(2){transition-delay:0.14s}
-.hero .reveal:nth-child(3){transition-delay:0.26s}
+.hero-label[data-scroll-line]{
+  color:rgb(
+    calc(62 + 139 * var(--scrub)),
+    calc(58 + 104 * var(--scrub)),
+    calc(42 - 3 * var(--scrub))
+  );
+}
+.hero h1[data-scroll-line]{
+  color:rgb(
+    calc(95 + 160 * var(--scrub)),
+    calc(100 + 155 * var(--scrub)),
+    calc(115 + 140 * var(--scrub))
+  );
+}
+.section-kicker[data-scroll-line]{
+  letter-spacing:0.28em;
+  color:rgb(
+    calc(42 + 84 * var(--scrub)),
+    calc(62 + 114 * var(--scrub)),
+    calc(92 + 163 * var(--scrub))
+  );
+}
+.section h2[data-scroll-line]{
+  border-bottom-color:rgba(201,162,39,calc(0.12 + 0.65 * var(--scrub)));
+  color:rgb(
+    calc(52 + 180 * var(--scrub)),
+    calc(56 + 180 * var(--scrub)),
+    calc(72 + 172 * var(--scrub))
+  );
+}
+p[data-scroll-line] strong{
+  opacity:calc(0.5 + 0.5 * var(--scrub));
+}
 @media (prefers-reduced-motion:reduce){
-  .reveal{opacity:1;transform:none;transition:none}
-  .hero .reveal{transition-delay:0s !important}
+  [data-scroll-line]{
+    --scrub:1 !important;
+    opacity:1 !important;
+    transform:none !important;
+    filter:none !important;
+    text-shadow:none !important;
+    color:var(--text-soft) !important;
+  }
+  .section-kicker[data-scroll-line]{color:var(--accent) !important}
+  .section h2[data-scroll-line]{color:#fff !important}
+  .hero-label[data-scroll-line]{color:var(--gold) !important}
+  .hero h1[data-scroll-line]{color:#fff !important}
+  p[data-scroll-line] strong{opacity:1 !important}
 }
 
 .divider{
@@ -255,9 +310,19 @@ body{
   border-bottom:none;
   padding-bottom:0;
 }
+.finale h2[data-scroll-line]{
+  border-bottom:none !important;
+}
 .finale .prose{
   text-align:left;
   margin-top:28px;
+}
+.prose-instruction p{
+  font-size:clamp(15px,1.85vw,17px);
+  line-height:1.62;
+  max-width:34rem;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .footer-note{
@@ -271,12 +336,13 @@ body{
 </head>
 <body>
 <div class="parallax-field" aria-hidden="true">
-  <div class="parallax-layer layer-sky" data-speed="0.06"></div>
-  <div class="parallax-layer layer-stars" data-speed="0.1"></div>
-  <div class="parallax-layer layer-glow" data-speed="0.12"></div>
-  <div class="parallax-layer layer-mountains-back" data-speed="0.22"></div>
-  <div class="parallax-layer layer-mountains-mid" data-speed="0.32"></div>
-  <div class="parallax-layer layer-mist" data-speed="0.38"></div>
+  <div class="parallax-layer layer-sky" data-speed="0.14"></div>
+  <div class="parallax-layer layer-stars" data-speed="0.24"></div>
+  <div class="parallax-layer layer-stars-slow" data-speed="-0.14"></div>
+  <div class="parallax-layer layer-glow" data-speed="0.2"></div>
+  <div class="parallax-layer layer-mountains-back" data-speed="0.48"></div>
+  <div class="parallax-layer layer-mountains-mid" data-speed="0.68"></div>
+  <div class="parallax-layer layer-mist" data-speed="0.82"></div>
 </div>
 
 <a class="back-landing" href="index.html">← Back</a>
@@ -284,19 +350,19 @@ body{
 <main class="story-root">
 
   <header class="hero">
-    <div class="hero-ornament reveal" data-reveal></div>
-    <p class="hero-label reveal" data-reveal>A tale for the class</p>
-    <h1 class="reveal" data-reveal>The Oracle<br>of Olympus</h1>
-    <p class="hero-scroll-hint">Scroll</p>
+    <div class="hero-ornament" data-scroll-line></div>
+    <p class="hero-label" data-scroll-line>From Athens</p>
+    <h1 data-scroll-line>The Oracle<br>of Olympus</h1>
+    <p class="hero-scroll-hint" data-scroll-line>Scroll</p>
   </header>
 
   <section class="section">
     <div class="section-inner">
-      <p class="section-kicker reveal" data-reveal>Athens</p>
-      <h2 class="reveal" data-reveal>The man who lent silver</h2>
-      <div class="prose reveal" data-reveal>
-        <p>Once, in Athens, there lived a trader called Alexios. He didn’t swing a sword in the stories they tell about heroes. He weighed silver instead. People came to him when they needed <strong>drachma</strong>, and he wrote their names down the way a baker writes orders: who borrowed, who paid, who still owed.</p>
-        <p>He knew who was family by blood and who was only family by marriage. He knew who slept in the city on a given night and who was miles away on the road. Folk said he never forgot a debt. That kept bread on his table. It also made enemies.</p>
+      <p class="section-kicker" data-scroll-line>I</p>
+      <h2 data-scroll-line>The man who held the silver</h2>
+      <div class="prose">
+        <p data-scroll-line>Listen. In Athens, when the smoke of morning rose from a thousand hearths, there walked a man who never lifted a spear in the games of war. His name was <strong>Alexios</strong>. The city knew him by the chime of <strong>drachma</strong> on his table — small coins of silver that passed from hand to hand like breath between lungs.</p>
+        <p data-scroll-line>He did not plough fields. He did not haul nets from the sea. He <strong>lent</strong>. He <strong>remembered</strong>. Borrower and lender, kin and stranger, all became marks upon his tablets: who owed, who paid, who still carried the weight of another man’s trust. In that ledger lay power quieter than a tyrant’s shout — and cold as winter stone.</p>
       </div>
     </div>
   </section>
@@ -305,11 +371,11 @@ body{
 
   <section class="section">
     <div class="section-inner">
-      <p class="section-kicker reveal" data-reveal>After dark</p>
-      <h2 class="reveal" data-reveal>The night nobody agrees on</h2>
-      <div class="prose reveal" data-reveal>
-        <p>Then came a night when Alexios didn’t wake up. The agora buzzed like a kicked hive. Some whispered about money. Some about old grudges. Some about kin who stood to gain when a rich man died. The witnesses didn’t all tell the same tale, and the city never got one neat ending tied up with string.</p>
-        <p>Your job, in our version of the story, is to play the investigators. You get a long list of citizens on paper: who they are, where they were, what they owed. The list lies to you if you rush. Names arrive late. A “brother” on the page might not be a brother by blood. You have to read like detectives, not like skimmers.</p>
+      <p class="section-kicker" data-scroll-line>II</p>
+      <h2 data-scroll-line>What the city whispered</h2>
+      <div class="prose">
+        <p data-scroll-line>They said he forgot <strong>nothing</strong>. A debt slept; Alexios woke it. They said he knew <strong>blood</strong> from <strong>law</strong> — which cousin was truly of the body, which bond was only ink and a wedding torch. They said he could tell you, on any night you named, whether a soul had slept behind Athens’ walls or fled down the road toward Corinth.</p>
+        <p data-scroll-line>Some blessed him when the month ran short. Others cursed him under their breath. <strong>Silver</strong> makes friends slowly; it makes enemies forever. And in every story worth telling, the gods note what a man grasps too tightly — and what he refuses to let fall.</p>
       </div>
     </div>
   </section>
@@ -318,11 +384,11 @@ body{
 
   <section class="section">
     <div class="section-inner">
-      <p class="section-kicker reveal" data-reveal>The tablets</p>
-      <h2 class="reveal" data-reveal>What the sheet is for</h2>
-      <div class="prose reveal" data-reveal>
-        <p>Think of it as the city’s muddy memory on one big table. Was this person in Athens when Alexios died? Do they still owe him coin? Are they kin by blood, or only by law and love? Mix those up and your whole case wobbles.</p>
-        <p>Mr White and the scrolls from your pack will slip you names you didn’t start with. Fill them in when you earn them. Skip a witness and the numbers you type later won’t forgive you.</p>
+      <p class="section-kicker" data-scroll-line>III</p>
+      <h2 data-scroll-line>The night the balance broke</h2>
+      <div class="prose">
+        <p data-scroll-line>Then came a night when the house was still — and Alexios did not rise with the dawn. The agora, which loves noise, found a new song: <strong>fear</strong> dressed as gossip. One mouth spoke of old coin and sharper anger. Another spoke of <strong>kin</strong> who stood nearer the inheritance when a rich man was silenced. Another spoke of doors locked, of footsteps on stone, of nothing certain except the body and the cold.</p>
+        <p data-scroll-line>The witnesses did not agree. The Furies themselves might have paused, uncertain whom to follow. Athens, which had praised clear answers, received instead a <strong>knot</strong> — blood, debt, absence, and memory, all tangled, with no single thread named <em>truth</em> for the chorus to sing.</p>
       </div>
     </div>
   </section>
@@ -331,12 +397,11 @@ body{
 
   <section class="section">
     <div class="section-inner">
-      <p class="section-kicker reveal" data-reveal>The hunt</p>
-      <h2 class="reveal" data-reveal>How you move through the school</h2>
-      <div class="prose reveal" data-reveal>
-        <p>You don’t solve this locked in one chair. Teams roam. The <strong>first code</strong> lands in the <strong>starting pack</strong>, and <strong>outside storage</strong> might hold <strong>one NFC tag</strong> — tap it with a phone if you’re using it that way. Everywhere else, the code sits on a <strong>QR or a printed slip</strong> in the right spot. Read it or scan it, then punch the digits into the <strong>laptop</strong> under the clue that matches where you are.</p>
-        <p><strong>Mr White</strong> isn’t there to scan fifteen tags. He’s there when the story picks a fight with you — noughts and crosses, Humpty backwards — and to read missing names onto your sheet. The codes don’t think for you. There’s still a cipher, sums to argue over, and rows to check until they behave.</p>
-        <p>Near the end, the Oracle sends you somewhere else in the building. What you find there isn’t another code slip. It’s the sort of riddle you only crack if you stand in front of it and use your eyes. I’ll say no more. Let them discover it.</p>
+      <p class="section-kicker" data-scroll-line>IV</p>
+      <h2 data-scroll-line>What no ode could finish</h2>
+      <div class="prose">
+        <p data-scroll-line>The city never closed the tale in one verse. Justice, in the old stories, sometimes arrives with a sword; sometimes it waits, unsatisfied, while mortals argue. Alexios became a name spoken beside <strong>questions</strong> — not answers — and the silver he once counted lay under the same sky as his silence.</p>
+        <p data-scroll-line>So the story stands: unfinished, like a broken amphora that still holds wine if you tilt it carefully. <strong>Your</strong> work, when you take up this mystery, is to weigh what the fragments allow — not to invent a villain where the text gives only shadow, but to read, as Athens could not, with care.</p>
       </div>
     </div>
   </section>
@@ -345,30 +410,31 @@ body{
 
   <section class="section finale">
     <div class="section-inner">
-      <p class="section-kicker reveal" data-reveal>Home</p>
-      <h2 class="reveal" data-reveal>Back to the room</h2>
-      <div class="prose reveal" data-reveal>
-        <p>When the machine says the trail is finished, you march back with a full sheet and a head full of arguments. The <strong>Verdict Sheet</strong> asks you plain questions. Answer from the evidence you carried, not from what felt exciting in the corridor.</p>
-        <p>Two teams can read the same rows and still pick different villains. That happens in real courts too. What matters is whether you can point at the line that convinced you. Talk. Disagree. Change your mind if someone shows you a fact you missed. That’s the game.</p>
+      <p class="section-kicker" data-scroll-line>Today</p>
+      <h2 data-scroll-line>Your path through the hunt</h2>
+      <div class="prose prose-instruction">
+        <p data-scroll-line>Begin with <strong>your scroll</strong> and what your teacher gives you. You will <strong>explore this place</strong>, following each clue where it leads. After <strong>every</strong> stop, come back to the <strong>laptop</strong>, unlock the next part of the tale, and keep your <strong>data sheet</strong> honest — so when the investigation ends, you speak not with guesses, but with evidence.</p>
       </div>
     </div>
   </section>
 
-  <p class="footer-note">Oracle of Olympus · Class activity</p>
+  <p class="footer-note" data-scroll-line>Oracle of Olympus · Class activity</p>
 </main>
 
 <script>
 (function(){
   var layers = document.querySelectorAll('.parallax-layer[data-speed]');
-  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var lines = document.querySelectorAll('[data-scroll-line]');
+  var reduceMq = window.matchMedia('(prefers-reduced-motion:reduce)');
+  var reduce = reduceMq.matches;
 
   function parallax(){
     if(reduce) return;
     var y = window.scrollY || window.pageYOffset;
-    var vh = window.innerHeight || 1;
+    var mult = 0.88;
     layers.forEach(function(el){
       var s = parseFloat(el.getAttribute('data-speed'), 10) || 0.2;
-      var t = y * s * 0.35;
+      var t = y * s * mult;
       if(el.classList.contains('layer-glow'))
         el.style.transform = 'translate3d(-50%,' + t + 'px,0)';
       else
@@ -376,33 +442,66 @@ body{
     });
   }
 
+  function smoothstep(x){
+    x = Math.max(0, Math.min(1, x));
+    return x * x * (3 - 2 * x);
+  }
+
+  function scrollScrub(){
+    if(reduce){
+      lines.forEach(function(el){ el.style.setProperty('--scrub', '1'); });
+      return;
+    }
+    var vh = window.innerHeight || 600;
+    var focal = vh * 0.34;
+    var falloff = vh * 0.5;
+    var dim = 0.16;
+    lines.forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if(r.bottom < -30 || r.top > vh + 40){
+        el.style.setProperty('--scrub', dim.toFixed(4));
+        return;
+      }
+      var anchor = r.top + Math.min(r.height * 0.38, 56);
+      var d = Math.abs(anchor - focal);
+      var raw = 1 - Math.min(1, d / falloff);
+      var t = smoothstep(raw);
+      el.style.setProperty('--scrub', t.toFixed(4));
+    });
+  }
+
+  function frame(){
+    parallax();
+    scrollScrub();
+    ticking = false;
+  }
+
   var ticking = false;
-  window.addEventListener('scroll', function(){
-    if(reduce) return;
+  function onScroll(){
     if(!ticking){
       ticking = true;
-      requestAnimationFrame(function(){
-        parallax();
-        ticking = false;
-      });
+      requestAnimationFrame(frame);
     }
-  }, {passive:true});
-  parallax();
-
-  var reveals = document.querySelectorAll('[data-reveal]');
-  if(!('IntersectionObserver' in window)){
-    reveals.forEach(function(el){ el.classList.add('is-visible'); });
-    return;
   }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if(en.isIntersecting){
-        en.target.classList.add('is-visible');
-        io.unobserve(en.target);
-      }
-    });
-  }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
-  reveals.forEach(function(el){ io.observe(el); });
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', function(){
+    onScroll();
+  });
+  function onReduceChange(){
+    reduce = reduceMq.matches;
+    frame();
+  }
+  if(reduceMq.addEventListener) reduceMq.addEventListener('change', onReduceChange);
+  else if(reduceMq.addListener) reduceMq.addListener(onReduceChange);
+
+  frame();
+
+  if(!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(){
+    onScroll();
+  }, {rootMargin:'80px 0px 80px 0px', threshold:[0,0.05,0.1,0.2,0.35,0.5,0.65,0.8,0.95,1]});
+  lines.forEach(function(el){ io.observe(el); });
 })();
 </script>
 </body>
